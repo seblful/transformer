@@ -2,11 +2,27 @@ import torch
 import torch.nn as nn
 
 
+class WordEmbedder():
+    pass
+
+
+class PosEncoder():
+    pass
+
+
 class Attention():
     pass
 
 
-class MultiHeadAttention():
+class BaseMultiHeadAttention():
+    pass
+
+
+class SimpleMultiHeadAttention():
+    pass
+
+
+class MaskedMultiHeadAttention():
     pass
 
 
