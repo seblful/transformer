@@ -1,4 +1,5 @@
-from transformer import Transformer, WordEmbedder, TextPreprocessor
+from dataset import TransformerDataset
+from transformer import Transformer, WordEmbedder
 
 import os
 import pandas as pd
@@ -8,13 +9,15 @@ DATA_PATH = os.path.join(HOME, 'data', 'data.csv')
 
 
 def main():
-    df = pd.read_csv(DATA_PATH)
-    text_corpus = df['eng'].to_list()
-    one_hot_text = TextPreprocessor(text_corpus=text_corpus,
-                                    dict_size=5).one_hot_text
+    transf_dataset = TransformerDataset(csv_path=DATA_PATH,
+                                        dict_size=5120,
+                                        sent_size=50)
+    we = WordEmbedder()
 
-    print(one_hot_text.shape, one_hot_text)
-    # w = WordEmbedder(text_corpus=xe)
+    for text in transf_dataset:
+        eng_text = text['eng_ind']
+        print(we(eng_text).shape)
+        break
 
 
 if __name__ == "__main__":
