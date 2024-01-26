@@ -17,7 +17,7 @@ class TransformerDataset(Dataset):
         self.dict_size = dict_size
         self.sent_size = sent_size
 
-        self.df = pd.read_csv(csv_path).iloc[:1000]
+        self.df = pd.read_csv(csv_path)  # .iloc[:1000]
 
         self.eng_texts_corpus = self.df['eng'].to_list()
         self.rus_texts_corpus = self.df['rus'].to_list()
