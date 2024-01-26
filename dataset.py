@@ -28,16 +28,14 @@ class TransformerDataset(Dataset):
     @property
     def eng_list_of_ind(self):
         if self.__eng_list_of_ind is None:
-            self.__eng_list_of_ind = self.texts_to_index(
-                self.eng_texts_corpus)
+            self.__eng_list_of_ind = self.texts_to_index(self.eng_texts_corpus)
 
         return self.__eng_list_of_ind
 
     @property
     def rus_list_of_ind(self):
         if self.__rus_list_of_ind is None:
-            self.__rus_list_of_ind = self.texts_to_index(
-                self.rus_texts_corpus)
+            self.__rus_list_of_ind = self.texts_to_index(self.rus_texts_corpus)
 
         return self.__rus_list_of_ind
 
@@ -60,16 +58,19 @@ class TransformerDataset(Dataset):
         indexed_data = [[word_to_idx.get(word, self.dict_size - 1)
                          for word in sentence.split()] for sentence in texts_corpus]
 
-        return indexed_data
+        indexed_tensors = [torch.tensor(
+            sublist + [0] * (self.sent_size - len(sublist))) for sublist in indexed_data]
+
+        return indexed_tensors
 
     def __len__(self):
-        assert len(self.eng_text_corpus) == len(self.rus_text_corpus)
-        return len(self.eng_text_corpus)
+        assert len(self.eng_texts_corpus) == len(self.rus_texts_corpus)
+        return len(self.eng_texts_corpus)
 
     def __getitem__(self, index):
 
-        eng_ind = torch.tensor(self.eng_list_of_ind[index])
-        rus_ind = torch.tensor(self.rus_list_of_ind[index])
+        eng_ind = self.eng_list_of_ind[index]
+        rus_ind = self.rus_list_of_ind[index]
 
-        return {"eng_ind": eng_ind,
-                "rus_ind": rus_ind}
+        return {"eng": eng_ind,
+                "ru": rus_ind}
